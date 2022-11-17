@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:text="use a stream" />
     <Button
-        android:id="@+id/btnChannel"
+        android:id="@+id/btnHttpUrlConnection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="use a channel" />
+        android:text="use a HttpUrlConnection" />
 
     <Button
         android:id="@+id/btn"
