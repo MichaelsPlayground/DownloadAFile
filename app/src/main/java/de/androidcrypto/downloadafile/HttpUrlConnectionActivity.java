@@ -34,7 +34,7 @@ import java.net.URL;
 
 public class HttpUrlConnectionActivity extends AppCompatActivity {
 
-    private static final String TAG = "HttpUrlConnectionActivity";
+    private static final String TAG = "HttpUrlConnectionAct";
     /**
      * https://github.com/WebJournal/journaldev/blob/master/CoreJavaProjects/CoreJavaExamples/src/com/journaldev/files/DownloadFileFromURL.java
      */
@@ -193,56 +193,17 @@ public class HttpUrlConnectionActivity extends AppCompatActivity {
             }
             httpConn.disconnect();
 
-
-
-
             // see https://www.codejava.net/java-se/networking/use-httpurlconnection-to-download-file-from-an-http-url
             // and https://www.vogella.com/tutorials/JavaNetworking/article.html
             // https://stackoverflow.com/questions/8276913/how-to-download-file-with-service-in-the-background
             // http://www.java2s.com/example/android/app/download-apk-file-from-url-using-httpurlconnection.html
 
-/*
-            URL url = new URL(downloadUrl);
-            ReadableByteHttpUrlConnection rbc = HttpUrlConnections.newHttpUrlConnection(url.openStream());
-            OutputStream fos = contextSave.getContentResolver().openOutputStream(downloadUri);
-            fos.getHttpUrlConnection().transferFrom(rbc, 0, Long.MAX_VALUE);
-            fos.close();
-            rbc.close();
-
-
-
-
-            URL url = new URL(downloadUrl);
-            HttpURLConnection urlConnection = (HttpURLConnection)
-                    url.openConnection();
-
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoOutput(true);
-
-            //connect
-            urlConnection.connect();
-
-            //set the path where we want to save the file
-            //File SDCardRoot = Environment.getExternalStorageDirectory();
-            //create a new file, to save the downloaded file
-            //File file = new File(SDCardRoot,"downloaded_file.png");
-            Log.i(TAG, "downloadUri: " + downloadUri);
-            OutputStream fileOutput = contextSave.getContentResolver().openOutputStream(downloadUri);
-
-            //Stream used for reading the data from the internet
-            InputStream inputStream = urlConnection.getInputStream();
-
-            //this is the total size of the file which we are downloading
-            totalSize = urlConnection.getContentLength();
-*/
             runOnUiThread(new Runnable() {
                 public void run() {
                     progressBar.setProgress(0);
                     progressBar.setMax(totalSize);
                 }
             });
-
-
         } catch (final MalformedURLException e) {
             showError("Error : MalformedURLException " + e);
             e.printStackTrace();
@@ -266,17 +227,7 @@ public class HttpUrlConnectionActivity extends AppCompatActivity {
     }
 
     void showProgress(String file_path){
-        //dialog = new Dialog(HttpUrlConnectionActivity.this);
-        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.setContentView(R.layout.myprogressdialog);
-        //dialog.setTitle("Download Progress");
-
-        //TextView text = (TextView) dialog.findViewById(R.id.tv1);
-        //text.setText("Downloading file from ... " + file_path);
-        //progressValue = (TextView) dialog.findViewById(R.id.cur_pg_tv);
         progressValue.setText("Starting download...");
-        //dialog.show();
-
         progressBar.setProgress(0);
     }
 

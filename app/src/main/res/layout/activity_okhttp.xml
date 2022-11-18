@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:text="https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&amp;token=adbf8437-09c3-451e-82f0-f59badf1778e"
+                    android:text=""
                     android:textSize="14sp"
                     android:visibility="visible"
                     tools:ignore="KeyboardInaccessibleWidget" />
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:text="https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&amp;token=6d3f4784-c7fc-4920-a498-288d54a1d3ea"
+                    android:text=""
                     android:textSize="14sp"
                     android:visibility="visible"
                     tools:ignore="KeyboardInaccessibleWidget" />

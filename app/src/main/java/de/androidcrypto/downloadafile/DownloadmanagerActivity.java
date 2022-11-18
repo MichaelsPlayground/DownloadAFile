@@ -1,14 +1,11 @@
 package de.androidcrypto.downloadafile;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,21 +14,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import java.io.IOException;
-
-public class DownloadmanagerActivity extends AppCompatActivity implements View.OnClickListener {
+public class DownloadmanagerActivity extends AppCompatActivity  {
 
     private static final String TAG = "DownloadmanagerActivity";
     /**
@@ -44,8 +31,6 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
     EditText filenameLarge;
     String downloadUrl;
     String downloadFilename;
-    ProgressBar progressBar;
-    private static final int REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE = 104;
     Context contextSave; // needed for write & read a file from uri
 
     private DownloadManager mgr = null;
@@ -59,31 +44,19 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloadmanager);
 
-        progressBar = findViewById(R.id.pbDownloadmanager);
         url = findViewById(R.id.etDownloadmanagerUrl);
         filename = findViewById(R.id.etDownloadmanagerFilename);
         urlLarge = findViewById(R.id.etDownloadmanagerUrlLarge);
         filenameLarge = findViewById(R.id.etDownloadmanagerFilenameLarge);
+
+        url.setText(MainActivity.jpg100);
+        urlLarge.setText(MainActivity.jpg2500);
 
         query = findViewById(R.id.query);
         query.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 queryStatus();
-            }
-        });
-        start = findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startDownload();
-            }
-        });
-        view = findViewById(R.id.view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 
@@ -102,7 +75,7 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
                 downloadUrl = url.getText().toString();
                 downloadFilename = filename.getText().toString();
                 contextSave = view.getContext();
-                verifyPermissionsWriteByte();
+                downloadUsingDownloadmanager(downloadUrl, downloadFilename);
             }
         });
 
@@ -119,7 +92,7 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
                 downloadUrl = urlLarge.getText().toString();
                 downloadFilename = filenameLarge.getText().toString();
                 contextSave = view.getContext();
-                verifyPermissionsWriteByte();
+                downloadUsingDownloadmanager(downloadUrl, downloadFilename);
             }
         });
     }
@@ -139,7 +112,7 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
         super.onPause();
     }
 
-    private void downloadUsingDownloadmanager(String downloadUrl, Uri uriFileStorage) {
+    private void downloadUsingDownloadmanager(String downloadUrl, String downloadFilename) {
         Log.i(TAG, "startDownload");
         Uri uri = Uri.parse(downloadUrl);
 
@@ -151,15 +124,11 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
         req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
                         | DownloadManager.Request.NETWORK_MOBILE)
                 .setAllowedOverRoaming(false)
-                .setTitle("Demo")
-                .setDescription("Something useful. No, really.")
+                .setTitle(downloadFilename)
+                .setDescription("Download is running...")
                 .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
                         downloadFilename);
         lastDownload = mgr.enqueue(req);
-
-        //v.setEnabled(false);
-        //query.setEnabled(true);
-        queryStatus();
     }
 
     @SuppressLint("Range")
@@ -239,114 +208,4 @@ public class DownloadmanagerActivity extends AppCompatActivity implements View.O
             }
         }
     };
-
-    private void downloadUsingDownloadmanager2(String downloadUrl, Uri uri) {
-        /*
-        try {
-
-            URL url = new URL(downloadUrl);
-            BufferedInputDownloadmanager bis = new BufferedInputDownloadmanager(url.openDownloadmanager());
-            OutputDownloadmanager fis = contextSave.getContentResolver().openOutputDownloadmanager(uri);
-            //FileOutputDownloadmanager fis = new FileOutputDownloadmanager(file);
-            byte[] buffer = new byte[1024];
-            int count = 0;
-            while ((count = bis.read(buffer, 0, 1024)) != -1) {
-                fis.write(buffer, 0, count);
-            }
-            fis.close();
-            bis.close();
-            progressBar.setVisibility(View.INVISIBLE);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getApplicationContext(),
-                    "Failure: " + e.toString(),
-                    Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                writeByteToExternalSharedStorage();
-            } else {
-                Toast.makeText(this, "Grant Storage Permission is Required to use this function.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void verifyPermissionsWriteByte() {
-        Log.i(TAG, "verifyPermissionsWriteByte");
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[1]) == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "verifyPermissionsWriteByte permissions GRANTED");
-            writeByteToExternalSharedStorage();
-        } else {
-            Log.i(TAG, "verifyPermissionsWriteByte permissions NOT GRANTED");
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE);
-        }
-    }
-
-    private void writeByteToExternalSharedStorage() {
-        Log.i(TAG, "writeByteToExternalSharedStorage");
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        // Optionally, specify a URI for the file that should appear in the
-        // system file picker when it loads.
-        //boolean pickerInitialUri = false;
-        //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, filename.getText().toString());
-        // get filename from edittext
-
-        String filenameIntent = downloadFilename;
-        // sanity check
-        if (filenameIntent.equals("")) {
-            filename.setText("no filename to save");
-            return;
-        }
-        intent.putExtra(Intent.EXTRA_TITLE, filenameIntent);
-        byteFileWriterActivityResultLauncher.launch(intent);
-    }
-
-    ActivityResultLauncher<Intent> byteFileWriterActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        Intent resultData = result.getData();
-                        // The result data contains a URI for the document or directory that
-                        // the user selected.
-                        Uri uri = null;
-                        if (resultData != null) {
-                            uri = resultData.getData();
-                            // Perform operations on the document using its URI.
-                            try {
-                                downloadUsingDownloadmanager(downloadUrl, uri);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(getApplicationContext(),
-                                        "Failure: " + e.toString(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }
-            });
-
-    @Override
-    public void onClick(View v) {
-
-    }
 }

@@ -1,10 +1,5 @@
 package de.androidcrypto.downloadafile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +12,11 @@ import android.os.StrictMode;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -26,18 +25,17 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     /**
      * sample files from https://file-examples.com
      * txt: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_txt.txt?alt=media&token=cdd9d344-a104-4636-ba86-e013e9fb9be6
-     * https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&token=ca709aad-cdd4-43d2-b404-171363737b64
-     * 100kb jpg: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&token=adbf8437-09c3-451e-82f0-f59badf1778e
+     * 100kb jpg: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&token=ca709aad-cdd4-43d2-b404-171363737b64
      * 1000kb jpg: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_1mb.jpg?alt=media&token=2649d345-2da7-4c8f-b3f6-e193137fcb66
-     * https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&token=2d1cfdfb-9b6d-4019-9433-7762c7793f42
-     * 2500kb jpg: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&token=6d3f4784-c7fc-4920-a498-288d54a1d3ea
+     * 2500kb jpg: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&token=2d1cfdfb-9b6d-4019-9433-7762c7793f42
+     * 17mb mp4: https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_mp4_1920_18mb.mp4?alt=media&token=265d9a03-9004-4532-b696-4101f46d142f
      */
 
-    Button useOkhttp;
     private View mLayout;
 
     public static String jpg100 = "https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&token=ca709aad-cdd4-43d2-b404-171363737b64";
     public static String jpg2500 = "https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&token=2d1cfdfb-9b6d-4019-9433-7762c7793f42";
+    public static String mp41920 = "https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_mp4_1920_18mb.mp4?alt=media&token=265d9a03-9004-4532-b696-4101f46d142f";
 
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 301;
 
@@ -52,26 +50,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         StrictMode.setThreadPolicy(policy);
 
         mLayout = findViewById(R.id.main_layout);
-        useOkhttp = findViewById(R.id.btnOkhttp);
-
-        /*
-        boolean preCheck = PermissionsUtilsOld.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        System.out.println("*** PreCheck: " + preCheck);
-
-        boolean check = PermissionsUtilsOld.checkAndRequestPermissions(this);
-        System.out.println("*** Permission check: " + check);
-*/
 
         showPermissionsPreview();
-/*
-        autoRequestAllPermissions();
-
-        String requiredPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        int checkVal = checkCallingOrSelfPermission(requiredPermission);
-        boolean permissionGranted = false;
-        if (checkVal==PackageManager.PERMISSION_GRANTED) permissionGranted = true;
-        System.out.println("*** permissionGranted: " + permissionGranted);
-*/
+        //autoRequestAllPermissions();
 
         Button useDownloadmanager = findViewById(R.id.btnDownloadmanager);
         useDownloadmanager.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
 
-
+        Button useOkhttp = findViewById(R.id.btnOkhttp);
         useOkhttp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void enableButtons() {
-        useOkhttp.setEnabled(true);
+        // nothing to do here, just in case you want to enable specific buttons when permission is enabled
     }
 
 
@@ -127,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 == PackageManager.PERMISSION_GRANTED) {
             // Permission is already available, start storage preview
             Snackbar.make(mLayout,
-                    "storage_permission_available",
+                    "storage permission available",
                     Snackbar.LENGTH_SHORT).show();
             enableButtons();
         } else {
@@ -144,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             // Request for storage permission.
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission has been granted. Start storage preview Activity.
-                Snackbar.make(mLayout, "storage_permission_granted",
+                Snackbar.make(mLayout, "storage permission granted",
                                 Snackbar.LENGTH_SHORT)
                         .show();
                 enableButtons();
@@ -219,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // Display a SnackBar with cda button to request the missing permission.
-            Snackbar.make(mLayout, "storage_access_required",
+            Snackbar.make(mLayout, "storage access required",
                     Snackbar.LENGTH_INDEFINITE).setAction("ok", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -231,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }).show();
 
         } else {
-            Snackbar.make(mLayout, "storage_unavailable", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mLayout, "storage unavailable", Snackbar.LENGTH_SHORT).show();
             // Request the permission. The result will be received in onRequestPermissionResult().
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);

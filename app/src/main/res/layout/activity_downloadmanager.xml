@@ -26,49 +26,13 @@
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/start"
-                android:text="start_download"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_weight="1"
-                />
-            <Button
                 android:id="@+id/query"
-                android:text="query_status"
+                android:text="query download status"
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
                 android:enabled="true"
                 />
-            <Button android:id="@+id/view"
-                android:text="view_log"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_weight="1"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/red_300"
-                android:text="WARNING: this method is running in MAIN-thread and will block your phone during download."
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:textStyle="normal|bold" />
-
-            <ProgressBar
-                android:id="@+id/pbDownloadmanager"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:indeterminate="false"
-                android:max="100"
-                android:progress="1"
-                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/tvDownloadmanagerProgress"
@@ -106,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:text="https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_100kb.jpg?alt=media&amp;token=adbf8437-09c3-451e-82f0-f59badf1778e"
+                    android:text=""
                     android:textSize="14sp"
                     android:visibility="visible"
                     tools:ignore="KeyboardInaccessibleWidget" />
@@ -179,7 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:text="https://firebasestorage.googleapis.com/v0/b/fir-playground-1856e.appspot.com/o/samplefiles%2Fsample_jpg_2500kb.jpg?alt=media&amp;token=6d3f4784-c7fc-4920-a498-288d54a1d3ea"
+                    android:text=""
                     android:textSize="14sp"
                     android:visibility="visible"
                     tools:ignore="KeyboardInaccessibleWidget" />

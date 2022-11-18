@@ -1,23 +1,10 @@
 package de.androidcrypto.downloadafile;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,10 +12,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,7 +42,6 @@ public class OkhttpActivity extends AppCompatActivity {
     String downloadUrl;
     String downloadFilename;
     ProgressBar progressBar;
-    private static final int REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE = 104;
     Context contextSave; // needed for write & read a file from uri
 
     @Override
@@ -64,6 +54,9 @@ public class OkhttpActivity extends AppCompatActivity {
         filename = findViewById(R.id.etOkhttpFilename);
         urlLarge = findViewById(R.id.etOkhttpUrlLarge);
         filenameLarge = findViewById(R.id.etOkhttpFilenameLarge);
+
+        url.setText(MainActivity.jpg100);
+        urlLarge.setText(MainActivity.jpg2500);
 
         Button run = findViewById(R.id.btnOkhttpRun);
         run.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +71,7 @@ public class OkhttpActivity extends AppCompatActivity {
                 downloadUrl = url.getText().toString();
                 downloadFilename = filename.getText().toString();
                 contextSave = view.getContext();
-                verifyPermissionsWriteByte();
+                writeByteToExternalSharedStorage();
             }
         });
 
@@ -95,7 +88,7 @@ public class OkhttpActivity extends AppCompatActivity {
                 downloadUrl = urlLarge.getText().toString();
                 downloadFilename = filenameLarge.getText().toString();
                 contextSave = view.getContext();
-                verifyPermissionsWriteByte();
+                writeByteToExternalSharedStorage();
             }
         });
     }
@@ -127,36 +120,6 @@ public class OkhttpActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                writeByteToExternalSharedStorage();
-            } else {
-                Toast.makeText(this, "Grant Storage Permission is Required to use this function.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void verifyPermissionsWriteByte() {
-        Log.i(TAG, "verifyPermissionsWriteByte");
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[1]) == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "verifyPermissionsWriteByte permissions GRANTED");
-            writeByteToExternalSharedStorage();
-        } else {
-            Log.i(TAG, "verifyPermissionsWriteByte permissions NOT GRANTED");
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    REQUEST_PERMISSION_WRITE_BYTE_EXTERNAL_STORAGE);
-        }
     }
 
     private void writeByteToExternalSharedStorage() {
