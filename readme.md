@@ -10,7 +10,7 @@ except for the DownloadManager example)
 
 This are the 4 methods:
 
-* using the **DownloadManager (you know them from your device, the actual download status is shown in the statusbar)
+* using the **DownloadManager** (you know it from your device, the actual download status is shown in the statusbar)
 * using the **OkHttps library**
 * using a **stream** (note: my implementation is running completely on the MainThread and your device will get blocked 
 completely until the download is finished. Don't use the method without starting it in a background thread.
